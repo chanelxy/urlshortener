@@ -3,6 +3,7 @@ from response import generateJSONResponse
 import random
 import shortuuid
 
+
 class URLService:
     def __init__(self, db):
         self.db = db
@@ -29,11 +30,11 @@ class URLService:
             create
         """
 
-        prefix = "http://short.it/"
+        prefix = "https://short.it/"
         if is_custom == "true":
             search_result = self.find_url(prefix + url.shortened)
             if search_result:
-                return generateJSONResponse("Shortened URL exists.", url.to_dto()), 400
+                return generateJSONResponse("Shortened URL exists. Please enter another custom URL.", "true", url.to_dto()), 200
             else:
                 path = url.shortened
         else:
@@ -43,6 +44,5 @@ class URLService:
         save_result = self.save(url)
 
         if save_result:
-            return generateJSONResponse("URL successfully created.", url.to_dto()), 200
-        return generateJSONResponse("URL creation unsuccessful.", url.to_dto()), 400
-
+            return generateJSONResponse("Short.It URL successfully created!", "false", url.to_dto()), 200
+        return generateJSONResponse("Shortened URL creation unsuccessful.", "true", url.to_dto()), 200

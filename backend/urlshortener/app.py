@@ -17,23 +17,25 @@ db = mongodb_client.db
 CORS(app)
 service = URLService(db)
 
+
 @app.route("/")
 def hello():
     return "hello"
 
 
-@app.route("/find")
+@app.route("/find", methods=["POST"])
 def find():
     """
-    sample input: { "shortened_url" : "https://short.it/develop/"}
+    sample input: { "shortened_url" : "http://short.it/develop/"}
     """
     data = request.get_json()
+    print('data --->', data)
     result = service.find_url(data["shortened_url"])
     if result:
         result = dict(result)
         url = URL(result["original_url"], result["shortened_url"])
-        return generateJSONResponse("Shortened URL exists", url.to_dto()), 200
-    return generateJSONResponse('Shortened URL does not exist.'), 200
+        return generateJSONResponse("Original URL found!",  "true", url.to_dto()), 200
+    return generateJSONResponse('Shortened URL does not exist.', "false"), 200
 
 
 @app.route("/create", methods=["POST"])
