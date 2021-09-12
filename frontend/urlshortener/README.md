@@ -1,13 +1,32 @@
-## Short.It
+## Short.it
 
-In the project directory, you can run:
+https://url-shortit.netlify.app/
 
-### `npm start`
+Short.it is a responsive web application built with `React.JS`\
+It aims to provide a fast and easy way to shorten or look up URLs.
 
-Runs the app in the development mode.\
+---
+
+### Available Scripts
+
+At project root directory, run:
+
+```
+npm install
+```
+
+To run the app in the development mode, run:
+
+```
+npm start
+```
+
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-### `npm test`
+To launch the test runner in the interactive watch mode, run:
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```
+npm test
+```
+
+---
