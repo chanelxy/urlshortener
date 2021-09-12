@@ -15,9 +15,19 @@ describe('Tabs', () => {
         const label = screen.getByText("Enter a short.it URL to search")
         expect(label).toBeInTheDocument();
     });
-    test('test Result component not shown', () => {
+    test('test Result component not shown before button is clicked', () => {
         render(<Tab />);
-        const result = screen.queryByRole("result")
+        const result = screen.queryByTestId("result")
         expect(result).toBeNull();
     });
+    // test('test Result component shown after input', () => {
+    //     render(<Tab />);
+    //     screen.debug();
+    //     fireEvent.change(screen.queryByRole("input"), {
+    //         target: { value: 'testurl.com/abcxyz' }
+    //     })
+    //     fireEvent.click(screen.getByText("Short it!"))
+    //     const result = screen.queryByTestId("result")
+    //     expect(result).toBeInTheDocument();
+    // });
 });

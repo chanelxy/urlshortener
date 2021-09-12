@@ -13,6 +13,7 @@ export default function Textbox({ label, value, handleChange, error }) {
                 required
                 value={value}
                 onChange={(e) => handleChange(e.target.value)}
+                data-testid="shorten"
             />
         );
     } else {

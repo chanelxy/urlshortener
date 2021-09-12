@@ -24,7 +24,7 @@ export default function Result({ message, URL }) {
     if (message) {
         return (
             <Paper className={classes.paper}>
-                <div className="result container">
+                <div className="result container" data-testid="result">
                     <div className="row">
                         <div className="col">
                             {message}
