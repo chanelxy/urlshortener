@@ -1,8 +1,6 @@
-from pymongo import ReturnDocument
 from response import generateJSONResponse
 import random
 import shortuuid
-
 
 class URLService:
     def __init__(self, db):
