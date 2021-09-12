@@ -15,11 +15,12 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-export default function Result({ message, URL }) {
+export default function Result({ action, message, shortened="", original="" }) {
     const classes = useStyles();
-    var link = URL;
-    if (!URL.includes("http")) {
-        link = "https://" + URL
+    var link = "https://" + original;
+    var display = shortened;
+    if (action === "search") {
+        display = original;
     }
     if (message) {
         return (
@@ -32,7 +33,7 @@ export default function Result({ message, URL }) {
                     </div>
                     <div className="row">
                         <div className="col">
-                            <a href={link} className="link">{URL}</a>
+                            <a href={link} className="link">{display}</a>
                         </div>
                     </div>
                 </div>

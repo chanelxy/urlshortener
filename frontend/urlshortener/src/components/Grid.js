@@ -16,7 +16,7 @@ export default function FullWidthGrid({ action }) {
     const classes = useStyles();
     const [originalURL, setOriginalURL] = useState('');
     const [customURL, setCustomURL] = useState('');
-    const [shortenedURL, setShortenedURL] = useState('http://short.it/');
+    const [shortenedURL, setShortenedURL] = useState('https://short.it/');
     const [message, setMessage] = useState(false);
     const [textboxError, setTextboxError] = useState(false)
 
@@ -26,10 +26,10 @@ export default function FullWidthGrid({ action }) {
             "Access-Control-Allow-Origin": "*"
         }
         if (action === 'shorten') {
-            if (originalURL === '') {
+            if (originalURL === '' || !originalURL.includes(".")) {
                 setTextboxError(true);
             } else {
-                const api = 'http://0.0.0.0:8001/create';
+                const api = process.env.REACT_APP_API_CREATE;
                 var is_custom = "false";
                 if (customURL !== '') {
                     is_custom = "true"
@@ -42,10 +42,8 @@ export default function FullWidthGrid({ action }) {
                 axios.post(api, request, headers)
                     .then((response) => {
                         const res = response.data
-                        console.log('response --->', res)
                         if (res.exist === "false") {
                             setShortenedURL(res.data.shortened_url)
-                            console.log('shortenedURL --->', shortenedURL)
                         }
                         setMessage(res.message)
                     })
@@ -56,21 +54,18 @@ export default function FullWidthGrid({ action }) {
                 setTextboxError(true);
             } else {
                 setOriginalURL(''); // clear previous state if exists
-                const api = 'http://0.0.0.0:8001/find';
+                const api = process.env.REACT_APP_API_FIND;
                 var request = {
                     "shortened_url": shortenedURL
                 };
-                if (!shortenedURL.includes("http://short.it/")) {
-                    console.log('it went in')
+                if (!shortenedURL.includes("https://short.it/")) {
                     request = {
-                        "shortened_url": "http://short.it/" + shortenedURL
+                        "shortened_url": "https://short.it/" + shortenedURL
                     };
                 }
-                console.log('request --->', request)
                 axios.post(api, request, headers)
                     .then((response) => {
                         const res = response.data
-                        console.log('response --->', res)
                         if (res.exist === "true") {
                             setOriginalURL(res.data.original_url)
                         }
@@ -106,7 +101,7 @@ export default function FullWidthGrid({ action }) {
                         <Button label="Reset" variant="outlined" handleClick={handleReset} />
                     </Grid>
                     <Grid item xs={12}>
-                        <Result message={message} URL={shortenedURL}/>
+                        <Result action="shorten" message={message} shortened={shortenedURL} original={originalURL} />
                     </Grid>
                 </Grid>
             </div>
@@ -125,7 +120,7 @@ export default function FullWidthGrid({ action }) {
                         <Button label="Reset" variant="outlined" handleClick={handleReset} />
                     </Grid>
                     <Grid item xs={12}>
-                        <Result message={message} URL={originalURL}/>
+                        <Result action="search" message={message} original={originalURL} />
                     </Grid>
                 </Grid>
             </div>
