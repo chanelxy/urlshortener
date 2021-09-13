@@ -43,8 +43,8 @@ def create():
     sample input:
         {
             "original_url" : "https://developer.gov.sg/",
-            "custom_url" : "develop" //,
-            "is_custom" : "true" / "false"
+            "custom_url" : "dev" //,
+            "is_custom" : "true"
         }
     """
     data = request.get_json()
