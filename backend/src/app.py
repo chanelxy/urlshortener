@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, redirect, abort, jsonify
 from flask_cors import CORS
 from dotenv import load_dotenv
 from flask_pymongo import PyMongo
@@ -19,13 +19,13 @@ service = URLService(db)
 
 @app.route("/")
 def hello():
-    return "hello"
+    return "Hi! Please head to https://url-shortit.netlify.app/"
 
 
 @app.route("/find", methods=["POST"])
 def find():
     """
-    sample input: { "shortened_url" : "http://short.it/develop/"}
+    sample input: { "shortened_url" : "http://url-shortit.herokuapp.com/develop/"}
     """
     data = request.get_json()
     print('data --->', data)
@@ -51,6 +51,13 @@ def create():
     url = URL(data["original_url"], data["custom_url"])
     result = service.create(data["is_custom"], url)
     return result
+
+
+@app.route("/<url>")
+def move(url):
+    # find shortened url and redirect
+    location = service.get_redirect_url(url)
+    return redirect(location)
 
 
 if __name__ == '__main__':

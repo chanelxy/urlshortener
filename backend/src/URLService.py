@@ -2,6 +2,7 @@ from response import generateJSONResponse
 import random
 import shortuuid
 
+
 class URLService:
     def __init__(self, db):
         self.db = db
@@ -28,7 +29,7 @@ class URLService:
             create
         """
 
-        prefix = "https://short.it/"
+        prefix = "https://url-shortit.herokuapp.com/"
         if is_custom == "true":
             search_result = self.find_url(prefix + url.shortened)
             if search_result:
@@ -44,3 +45,15 @@ class URLService:
         if save_result:
             return generateJSONResponse("Short.It URL successfully created!", "false", url.to_dto()), 200
         return generateJSONResponse("Shortened URL creation unsuccessful.", "true", url.to_dto()), 200
+ 
+    def get_redirect_url(self, shortened_url):
+        location = ''
+        if ("https://url-shortit.herokuapp.com/" not in shortened_url):
+            shortened_url = "https://url-shortit.herokuapp.com/" + shortened_url
+        result = self.find_url(shortened_url)
+        if result:
+            result = dict(result)
+            if "http" not in result["original_url"]:
+                location = "http://"
+            location += result["original_url"]
+        return location
