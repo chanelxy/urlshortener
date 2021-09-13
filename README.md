@@ -3,13 +3,12 @@
 Frontend is hosted on: https://url-shortit.netlify.app/ \
 Backend is hosted on: https://url-shortit.herokuapp.com/
 
-Short.it is a responsive web application built with `React.JS`\
-It aims to provide a simple way to shorten or look up URLs.
+Short.it provides a simple way to shorten URLs.
 
 ### Tech Stack
-- Backend is built with Python `Flask`, and dockerized for deployment to Heroku
-- Frontend responsive web application is built with JavaScript `React.JS`
-- Data is stored on MongoDB Atlas
+- Backend is built with Python `Flask`, and dockerized for deployment on Heroku
+- Frontend responsive web application is built with JavaScript `React.JS`, hosted on Netlify
+- Data is stored and persisted on MongoDB Atlas
 
 ---
 
