@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Textbox from './Textbox';
@@ -12,22 +12,43 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
+const checkValidURL = (url) => {
+    if (url === '') {
+        return false
+    } else if (!url.includes(".")) {
+        return false
+    } else if (url.includes(" ")) {
+        return false
+    } else if (url.includes('"')) {
+        return false
+    }
+    return true
+}
+
 export default function FullWidthGrid({ action }) {
     const classes = useStyles();
     const [originalURL, setOriginalURL] = useState('');
     const [customURL, setCustomURL] = useState('');
-    const [shortenedURL, setShortenedURL] = useState('https://short.it/');
+    const [shortenedURL, setShortenedURL] = useState('https://url-shortit.herokuapp.com/');
     const [message, setMessage] = useState(false);
     const [textboxError, setTextboxError] = useState(false)
 
+    // set up headers for api
+    const headers = {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        "Access-Control-Allow-Origin": "*"
+    }
+
+    // start up server on page load
+    useEffect(() => {
+        axios.get('https://url-shortit.herokuapp.com/', headers)
+    }, [])
+
     const handleSubmit = () => {
-        const headers = {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            "Access-Control-Allow-Origin": "*"
-        }
         if (action === 'shorten') {
-            if (originalURL === '' || !originalURL.includes(".")) {
+            if (!checkValidURL(originalURL)) {
                 setTextboxError(true);
+                setMessage("Please key in a valid URL.")
             } else {
                 const api = process.env.REACT_APP_API_CREATE;
                 var is_custom = "false";
@@ -58,9 +79,9 @@ export default function FullWidthGrid({ action }) {
                 var request = {
                     "shortened_url": shortenedURL
                 };
-                if (!shortenedURL.includes("https://short.it/")) {
+                if (!shortenedURL.includes("https://url-shortit.herokuapp.com/")) {
                     request = {
-                        "shortened_url": "https://short.it/" + shortenedURL
+                        "shortened_url": "https://url-shortit.herokuapp.com/" + shortenedURL
                     };
                 }
                 axios.post(api, request, headers)
@@ -79,7 +100,7 @@ export default function FullWidthGrid({ action }) {
     const handleReset = () => {
         setOriginalURL('');
         setCustomURL('');
-        setShortenedURL('https://short.it/');
+        setShortenedURL('https://url-shortit.herokuapp.com/');
         setMessage('');
         setTextboxError(false);
     }

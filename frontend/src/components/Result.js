@@ -17,12 +17,10 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Result({ action, message, shortened="", original="" }) {
     const classes = useStyles();
-    var link = "https://" + original;
-    var display = shortened;
-    if (action === "search") {
-        display = original;
-    }
-    if (message) {
+    if (message && action === "shorten") {
+        if (message.includes("exists") || message.includes("valid")) {
+            shortened = ''
+        }
         return (
             <Paper className={classes.paper}>
                 <div className="result container" data-testid="result">
@@ -33,7 +31,25 @@ export default function Result({ action, message, shortened="", original="" }) {
                     </div>
                     <div className="row">
                         <div className="col">
-                            <a href={link} className="link">{display}</a>
+                            <a href={shortened} className="link">{shortened}</a>
+                        </div>
+                    </div>
+                </div>
+            </Paper>
+        );
+
+    } else if (message && action === "search") {
+        return (
+            <Paper className={classes.paper}>
+                <div className="result container" data-testid="result">
+                    <div className="row">
+                        <div className="col">
+                            {message}
+                        </div>
+                    </div>
+                    <div className="row">
+                        <div className="col">
+                            <a href={original} className="link">{original}</a>
                         </div>
                     </div>
                 </div>
