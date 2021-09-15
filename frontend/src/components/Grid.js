@@ -66,7 +66,6 @@ export default function FullWidthGrid({ action }) {
                     .then((response) => {
                         const res = response.data
                         if (!res.exist) {
-                            console.log('i went here!')
                             setShortenedURL(res.data.shortened_url)
                         }
                         setMessage(res.message)
@@ -90,7 +89,6 @@ export default function FullWidthGrid({ action }) {
                 axios.post(api, request, headers)
                     .then((response) => {
                         const res = response.data
-                        console.log('search:', res.exist)
                         if (res.exist) {
                             setOriginalURL(res.data.original_url)
                         }

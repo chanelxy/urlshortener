@@ -43,6 +43,5 @@ export default function Result({ action, message, shortened="", original="" }) {
             </Paper>
         );
     }
-    console.log('url', url)
     return null
 }
