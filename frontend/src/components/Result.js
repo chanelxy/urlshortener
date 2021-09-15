@@ -17,9 +17,14 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Result({ action, message, shortened="", original="" }) {
     const classes = useStyles();
-    if (message && action === "shorten") {
-        if (message.includes("exists") || message.includes("valid")) {
-            shortened = ''
+    var url = shortened;
+    if (message) {
+        if (action === "shorten") {
+            if (message.includes("exists") || message.includes("valid")) {
+                url = '';
+            }
+        } else if (action === "search") {
+            url = original;
         }
         return (
             <Paper className={classes.paper}>
@@ -31,30 +36,13 @@ export default function Result({ action, message, shortened="", original="" }) {
                     </div>
                     <div className="row">
                         <div className="col">
-                            <a href={shortened} className="link">{shortened}</a>
-                        </div>
-                    </div>
-                </div>
-            </Paper>
-        );
-
-    } else if (message && action === "search") {
-        return (
-            <Paper className={classes.paper}>
-                <div className="result container" data-testid="result">
-                    <div className="row">
-                        <div className="col">
-                            {message}
-                        </div>
-                    </div>
-                    <div className="row">
-                        <div className="col">
-                            <a href={original} className="link">{original}</a>
+                            <a href={url} className="link">{url}</a>
                         </div>
                     </div>
                 </div>
             </Paper>
         );
     }
+    console.log('url', url)
     return null
 }

@@ -14,12 +14,5 @@ export default function Button({ label, handleClick, variant }) {
                 {label}
             </button>
         );
-    } else {
-        return (
-            <button onClick={handleClick} fullWidth variant={variant} className="copyBtn">
-                {label}
-            </button>
-        );
     }
-
 }

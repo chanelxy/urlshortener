@@ -1,6 +1,7 @@
 from flask import Flask, request, redirect, abort, jsonify
 from flask_cors import CORS
 from dotenv import load_dotenv
+import json
 from flask_pymongo import PyMongo
 from response import generateJSONResponse
 import os
@@ -28,13 +29,12 @@ def find():
     sample input: { "shortened_url" : "http://url-shortit.herokuapp.com/develop/"}
     """
     data = request.get_json()
-    print('data --->', data)
     result = service.find_url(data["shortened_url"])
     if result:
         result = dict(result)
         url = URL(result["original_url"], result["shortened_url"])
-        return generateJSONResponse("Original URL found!",  "true", url.to_dto()), 200
-    return generateJSONResponse('Shortened URL does not exist.', "false"), 200
+        return generateJSONResponse("Original URL found!",  True, url.to_dto()), 200
+    return generateJSONResponse('Shortened URL does not exist.', False), 200
 
 
 @app.route("/create", methods=["POST"])
@@ -44,7 +44,7 @@ def create():
         {
             "original_url" : "https://developer.gov.sg/",
             "custom_url" : "dev" //,
-            "is_custom" : "true"
+            "is_custom" : true
         }
     """
     data = request.get_json()

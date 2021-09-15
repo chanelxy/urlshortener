@@ -12,6 +12,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
+// function to check for invalid URL
 const checkValidURL = (url) => {
     if (url === '') {
         return false
@@ -40,20 +41,21 @@ export default function FullWidthGrid({ action }) {
     }
 
     // start up server on page load
-    useEffect(() => {
-        axios.get('https://url-shortit.herokuapp.com/', headers)
-    }, [])
+    // useEffect(() => {
+    //     axios.get('https://url-shortit.herokuapp.com/', headers)
+    // }, [])
 
     const handleSubmit = () => {
         if (action === 'shorten') {
+            // check if original URL given is valid
             if (!checkValidURL(originalURL)) {
                 setTextboxError(true);
                 setMessage("Please key in a valid URL.")
             } else {
                 const api = process.env.REACT_APP_API_CREATE;
-                var is_custom = "false";
+                var is_custom = false;
                 if (customURL !== '') {
-                    is_custom = "true"
+                    is_custom = true
                 }
                 const request = {
                     "original_url": originalURL,
@@ -63,7 +65,8 @@ export default function FullWidthGrid({ action }) {
                 axios.post(api, request, headers)
                     .then((response) => {
                         const res = response.data
-                        if (res.exist === "false") {
+                        if (!res.exist) {
+                            console.log('i went here!')
                             setShortenedURL(res.data.shortened_url)
                         }
                         setMessage(res.message)
@@ -74,7 +77,7 @@ export default function FullWidthGrid({ action }) {
             if (shortenedURL === '') {
                 setTextboxError(true);
             } else {
-                setOriginalURL(''); // clear previous state if exists
+                setOriginalURL('');
                 const api = process.env.REACT_APP_API_FIND;
                 var request = {
                     "shortened_url": shortenedURL
@@ -87,7 +90,8 @@ export default function FullWidthGrid({ action }) {
                 axios.post(api, request, headers)
                     .then((response) => {
                         const res = response.data
-                        if (res.exist === "true") {
+                        console.log('search:', res.exist)
+                        if (res.exist) {
                             setOriginalURL(res.data.original_url)
                         }
                         setMessage(res.message)
