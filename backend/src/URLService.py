@@ -1,6 +1,7 @@
 from response import generateJSONResponse
 import random
 import shortuuid
+from datetime import datetime
 
 class URLService:
     def __init__(self, db):
@@ -45,14 +46,32 @@ class URLService:
             return generateJSONResponse("Shortened URL successfully created!", False, url.to_dto()), 200
         return generateJSONResponse("Shortened URL creation was unsuccessful.", True, url.to_dto()), 200
  
+
     def get_redirect_url(self, shortened_url):
+        # update:
+        # increase visit count
+        # change datetime
+
         location = ''
         if ("https://url-shortit.herokuapp.com/" not in shortened_url):
             shortened_url = "https://url-shortit.herokuapp.com/" + shortened_url
         result = self.find_url(shortened_url)
         if result:
             result = dict(result)
+
+            date = datetime.now()
+            print("date =", date)
+            # dd/mm/YY H:M:S
+            dt_string = date.strftime("%d/%m/%Y %H:%M:%S")
+            print("date and time =", dt_string)
+
+            # call update function
+            self.db.links.update_one({'shortened_url': shortened_url}, {
+                                        '$inc': {'visit_count': 1},
+                                        '$set': {'last_visited_date': dt_string}})
+
             if "http" not in result["original_url"]:
                 location = "http://"
             location += result["original_url"]
+        
         return location

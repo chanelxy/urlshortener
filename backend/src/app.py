@@ -1,3 +1,4 @@
+from datetime import datetime
 from flask import Flask, request, redirect, abort, jsonify
 from flask_cors import CORS
 from dotenv import load_dotenv
@@ -32,7 +33,10 @@ def find():
     result = service.find_url(data["shortened_url"])
     if result:
         result = dict(result)
-        url = URL(result["original_url"], result["shortened_url"])
+        url = URL(result["original_url"],
+                  result["shortened_url"], 
+                  result["visit_count"], 
+                  result["last_visited_date"])
         return generateJSONResponse("Original URL found!",  True, url.to_dto()), 200
     return generateJSONResponse('Shortened URL does not exist.', False), 200
 
@@ -44,11 +48,18 @@ def create():
         {
             "original_url" : "https://developer.gov.sg/",
             "custom_url" : "dev" //,
-            "is_custom" : true
+            "is_custom" : true,
+            custom_url : 0
         }
     """
+    date = datetime.now()
+    print("date =", date)
+    # dd/mm/YY H:M:S
+    dt_string = date.strftime("%d/%m/%Y %H:%M:%S")
+    print("date and time =", dt_string)
+
     data = request.get_json()
-    url = URL(data["original_url"], data["custom_url"])
+    url = URL(data["original_url"], data["custom_url"], 0, dt_string)
     result = service.create(data["is_custom"], url)
     return result
 
