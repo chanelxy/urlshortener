@@ -5,6 +5,7 @@ import Textbox from './Textbox';
 import Button from './Button';
 import axios from 'axios';
 import Result from './Result';
+import Popularity from './Popularity';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -33,6 +34,8 @@ export default function FullWidthGrid({ action }) {
     const [shortenedURL, setShortenedURL] = useState('https://url-shortit.herokuapp.com/');
     const [message, setMessage] = useState(false);
     const [textboxError, setTextboxError] = useState(false)
+    const [visitCount, setvisitCount] = useState(0);
+    const [lastVisitedDT, setlastVisitedDT] = useState('');
 
     // set up headers for api
     const headers = {
@@ -90,7 +93,9 @@ export default function FullWidthGrid({ action }) {
                     .then((response) => {
                         const res = response.data
                         if (res.exist) {
-                            setOriginalURL(res.data.original_url)
+                            setOriginalURL(res.data.original_url);
+                            setvisitCount(res.data.visit_count);
+                            setlastVisitedDT(res.data.last_visited_date);
                         }
                         setMessage(res.message)
                     })
@@ -144,6 +149,7 @@ export default function FullWidthGrid({ action }) {
                     </Grid>
                     <Grid item xs={12}>
                         <Result action="search" message={message} original={originalURL} />
+                        <Popularity visitCount={visitCount} lastVisitedDT={lastVisitedDT} />
                     </Grid>
                 </Grid>
             </div>
